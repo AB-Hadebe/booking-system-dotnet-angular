@@ -1,0 +1,27 @@
+# Visual Studio / .NET
+.vs/
+bin/
+obj/
+*.user
+*.suo
+*.userprefs
+*.swp
+[Dd]ebug/
+[Rr]elease/
+publish/
+*.log
+TestResults/
+.idea/
+
+# Secrets / local config (never commit real credentials)
+appsettings.Local.json
+secrets.json
+
+# Node / Angular (the client folder has its own .gitignore too)
+node_modules/
+dist/
+.angular/
+
+# OS
+.DS_Store
+Thumbs.db

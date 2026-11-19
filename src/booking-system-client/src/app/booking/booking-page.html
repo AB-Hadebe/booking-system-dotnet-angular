@@ -1,0 +1,130 @@
+@if (errorMessage()) {
+  <p class="error" role="alert">{{ errorMessage() }}</p>
+}
+
+@if (booking(); as b) {
+  <section class="confirmation">
+    @if (cancelled()) {
+      <h2>Booking cancelled</h2>
+      <p>Your booking has been cancelled and the time slot is free again.</p>
+    } @else {
+      <h2>You're booked in ✓</h2>
+      <dl>
+        <dt>Service</dt>
+        <dd>{{ b.serviceName }}</dd>
+        <dt>With</dt>
+        <dd>{{ b.providerName }}</dd>
+        <dt>When</dt>
+        <dd>{{ b.startTime | date: 'EEEE d MMMM, HH:mm' }} – {{ b.endTime | date: 'HH:mm' }}</dd>
+        <dt>Name</dt>
+        <dd>{{ b.customerName }}</dd>
+        <dt>Reference</dt>
+        <dd>#{{ b.id }}</dd>
+      </dl>
+      <button type="button" class="secondary" (click)="cancelBooking()">Cancel this booking</button>
+    }
+    <button type="button" class="primary" (click)="startOver()">Make another booking</button>
+  </section>
+} @else {
+  @if (loading()) {
+    <p>Loading…</p>
+  } @else {
+    <section class="step">
+      <h2><span class="step-num">1</span> Choose a service</h2>
+      <div class="choices">
+        @for (service of services(); track service.id) {
+          <button
+            type="button"
+            class="choice"
+            [class.selected]="selectedService()?.id === service.id"
+            [attr.aria-pressed]="selectedService()?.id === service.id"
+            (click)="selectService(service)"
+          >
+            <strong>{{ service.name }}</strong>
+            <span>{{ service.durationMinutes }} min · {{ service.price | currency: 'ZAR' : 'symbol-narrow' }}</span>
+          </button>
+        }
+      </div>
+    </section>
+
+    @if (selectedService()) {
+      <section class="step">
+        <h2><span class="step-num">2</span> Choose a provider</h2>
+        <div class="choices">
+          @for (provider of providers(); track provider.id) {
+            <button
+              type="button"
+              class="choice"
+              [class.selected]="selectedProvider()?.id === provider.id"
+              [attr.aria-pressed]="selectedProvider()?.id === provider.id"
+              (click)="selectProvider(provider)"
+            >
+              <strong>{{ provider.name }}</strong>
+              <span>{{ provider.specialty }}</span>
+            </button>
+          }
+        </div>
+      </section>
+    }
+
+    @if (selectedProvider()) {
+      <section class="step">
+        <h2><span class="step-num">3</span> Pick a time</h2>
+        @if (loadingSlots()) {
+          <p>Loading available times…</p>
+        } @else if (slotDays().length === 0) {
+          <p class="empty">No open slots for {{ selectedProvider()?.name }} right now.</p>
+        } @else {
+          @for (day of slotDays(); track day.label) {
+            <h3>{{ day.label }}</h3>
+            <div class="slots">
+              @for (slot of day.slots; track slot.id) {
+                <button
+                  type="button"
+                  class="slot"
+                  [class.selected]="selectedSlot()?.id === slot.id"
+                  [attr.aria-pressed]="selectedSlot()?.id === slot.id"
+                  (click)="selectSlot(slot)"
+                >
+                  {{ slot.startTime | date: 'HH:mm' }}
+                </button>
+              }
+            </div>
+          }
+        }
+      </section>
+    }
+
+    @if (selectedSlot()) {
+      <section class="step">
+        <h2><span class="step-num">4</span> Your details</h2>
+        <form [formGroup]="form" (ngSubmit)="submit()">
+          <label>
+            Name
+            <input type="text" formControlName="customerName" autocomplete="name" />
+          </label>
+          @if (form.controls.customerName.touched && form.controls.customerName.invalid) {
+            <p class="field-error">Please enter your name.</p>
+          }
+
+          <label>
+            Email
+            <input type="email" formControlName="customerEmail" autocomplete="email" />
+          </label>
+          @if (form.controls.customerEmail.touched && form.controls.customerEmail.invalid) {
+            <p class="field-error">Please enter a valid email address.</p>
+          }
+
+          <p class="summary">
+            {{ selectedService()?.name }} with {{ selectedProvider()?.name }} on
+            {{ selectedSlot()?.startTime | date: 'EEEE d MMMM, HH:mm' }}
+          </p>
+
+          <button type="submit" class="primary" [disabled]="submitting()">
+            {{ submitting() ? 'Booking…' : 'Confirm booking' }}
+          </button>
+        </form>
+      </section>
+    }
+  }
+}

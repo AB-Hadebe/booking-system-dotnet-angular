@@ -1,0 +1,118 @@
+$accent: #2f6f4f;
+$border: #e3e0da;
+$muted: #5c6560;
+
+.step { margin-bottom: 28px; }
+
+h2 {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 1.15rem;
+  margin: 0 0 12px;
+}
+
+h3 {
+  font-size: 0.95rem;
+  color: $muted;
+  margin: 16px 0 8px;
+}
+
+.step-num {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  background: $accent;
+  color: #fff;
+  font-size: 0.85rem;
+}
+
+.choices {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 10px;
+}
+
+.choice {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  text-align: left;
+  padding: 14px;
+  border: 1px solid $border;
+  border-radius: 10px;
+  background: #fff;
+  cursor: pointer;
+  font: inherit;
+
+  span { color: $muted; font-size: 0.9rem; }
+
+  &:hover { border-color: $accent; }
+  &.selected { border-color: $accent; background: #eaf3ee; box-shadow: 0 0 0 1px $accent; }
+}
+
+.slots { display: flex; flex-wrap: wrap; gap: 8px; }
+
+.slot {
+  padding: 8px 14px;
+  border: 1px solid $border;
+  border-radius: 20px;
+  background: #fff;
+  cursor: pointer;
+  font: inherit;
+
+  &:hover { border-color: $accent; }
+  &.selected { background: $accent; border-color: $accent; color: #fff; }
+}
+
+form label { display: block; margin-bottom: 4px; font-weight: 600; }
+
+input {
+  display: block;
+  width: 100%;
+  margin-top: 4px;
+  margin-bottom: 12px;
+  padding: 10px;
+  border: 1px solid #c9c4b8;
+  border-radius: 6px;
+  font: inherit;
+}
+
+.field-error { color: #a13c30; margin: -6px 0 12px; font-size: 0.85rem; }
+.summary { background: #f5f8f6; padding: 10px 12px; border-radius: 6px; }
+.empty { color: #8a8578; font-style: italic; }
+
+.error {
+  background: #fdecea;
+  color: #a13c30;
+  padding: 10px 14px;
+  border-radius: 6px;
+  margin-bottom: 20px;
+}
+
+button.primary,
+button.secondary {
+  padding: 10px 18px;
+  border-radius: 6px;
+  font: inherit;
+  cursor: pointer;
+  margin-right: 8px;
+}
+
+button.primary { background: $accent; color: #fff; border: 1px solid $accent; }
+button.primary:disabled { opacity: 0.6; cursor: default; }
+button.secondary { background: #fff; color: #a13c30; border: 1px solid #a13c30; }
+
+.confirmation {
+  border: 1px solid $accent;
+  background: #f5f8f6;
+  border-radius: 10px;
+  padding: 20px;
+
+  dl { display: grid; grid-template-columns: 110px 1fr; gap: 6px 12px; margin: 0 0 18px; }
+  dt { color: $muted; }
+  dd { margin: 0; font-weight: 600; }
+}
